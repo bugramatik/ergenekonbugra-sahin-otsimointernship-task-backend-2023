@@ -1,11 +1,53 @@
-def validate_id(func):
+import json
+import re
+from http import HTTPStatus
+
+
+def validate_listmeals(func):
     def wrapper(*args, **kwargs):
-        id = kwargs.get('id')
-        if not id:
-            raise MissingParameterError("ID parameter is missing")
-        try:
-            int(id)
-        except ValueError:
-            raise InvalidParameterError("ID parameter should be an integer")
-        return func(*args, **kwargs)
+
+        query_string = args[0]
+        
+        if re.match(r"^$", query_string):
+            # Default case
+            return func(*args, **kwargs)
+        
+        elif re.match(r"^is_vegan=(true|false)($|&is_vegetarian=(true|false))$", query_string):
+            # Successful case
+            return func(*args, **kwargs)
+
+        elif re.match(r"^is_vegetarian=(true|false)($|&is_vegan=(true|false))$", query_string):
+            # Successful case
+            return func(*args, **kwargs)
+        
+        else:  
+            # Case of there is no id parameter
+            return {'error': 'parameter/s or values are wrong'}, HTTPStatus.BAD_REQUEST
+       
+
+
+    return wrapper
+
+
+def validate_getmeals(func):
+    def wrapper(*args, **kwargs):
+
+        query_string = args[0]
+
+        if re.match(r"^id=(\d+)$", query_string):
+            # Succesful case
+            return func(*args, **kwargs)
+
+        elif re.match(r"^id=$", query_string):
+            # Case of query is "id="
+            return {'error': 'id value is missing'}, HTTPStatus.BAD_REQUEST
+
+        elif re.match(r"^id=.*$", query_string):
+            # Case of id value is not integer
+            return {'error': 'id parameter is not a valid integer'}, HTTPStatus.BAD_REQUEST
+
+        else:  
+            # Case of there is no id parameter
+            return {'error': 'id parameter is missing'}, HTTPStatus.BAD_REQUEST
+
     return wrapper
