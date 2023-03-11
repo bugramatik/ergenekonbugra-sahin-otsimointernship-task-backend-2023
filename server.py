@@ -1,6 +1,6 @@
 from http.server import HTTPServer
 import socket
-from main_code import SimpleHTTPRequestHandler
+from api.main_code import SimpleHTTPRequestHandler
 #TODO: Error handling
  
 def run():

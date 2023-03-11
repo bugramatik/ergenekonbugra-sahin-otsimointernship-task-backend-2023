@@ -1,9 +1,10 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
+from validators import validate_id
 import socketserver
 import json
 
-with open('meals.json') as f:
+with open('../data/meals.json') as f:
     meals_dataset = json.load(f)
 
 # For faster search according to ids of meals and names of ingredients
@@ -51,12 +52,16 @@ def get_listmeals(is_vegetarian=False, is_vegan=False):
 
     return result
 
+@validate_id
+def get_getmeals(id):
+    id = int(id)
+    return meals_dict[id]
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
-
+    #TODO: config file
     PORT = 8080
 
-    with open('meals.json', 'r') as f:
+    with open('../data/meals.json', 'r') as f:
         meals = json.load(f)
 
     def do_GET(self):
@@ -67,6 +72,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 is_vegetarian = query_params.get('is_vegetarian', ['false'])[0] == 'true'
                 is_vegan = query_params.get('is_vegan', ['false'])[0] == 'true'
                 result = get_listmeals(is_vegetarian, is_vegan)
+            elif parsed_url.path == '/getMeals':
+                query_id = query_params.get('id')
+                result = get_getmeals(query_id)
             else:
                 self.send_response(404)
                 self.end_headers()
