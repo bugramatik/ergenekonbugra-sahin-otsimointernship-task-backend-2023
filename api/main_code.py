@@ -1,9 +1,10 @@
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
-from api.validators import validate_getmeals, validate_listmeals,validate_quality, validate_price
+from api.validators import validate_getmeals, validate_listmeals,validate_quality, validate_price, validate_random
 from api.constants import *
 import json
+import random
 
 with open(MEALS_DATASET_PATH) as f:
     meals_dataset = json.load(f)
@@ -196,10 +197,26 @@ def post_price(query,meal_id,query_ingredients_dict):
     return {'price': total_result }
       
 
+@validate_random
+def post_random(query,budget):
+    #TODO return yapisi biraz farkli ona bakmak lazim
+    result_meal = []
+    if budget is None:
+        #Default case
+        result_meal = random.choice(list(meals_dict.values()))
+        return result_meal
+    else:
+        #TODO: budgetu int yapmak lazim
+        #TODO: budgetu 0dan kucuk yapmak lazim
+        budget = int(budget)
+        
 
+
+    return result_meal
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     # TODO: config file
+    #TODO: HATA yourmlari
     PORT = 8080
 
     def do_GET(self):
@@ -242,8 +259,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         content_length = int(self.headers['Content-Length'])
         query_string = self.rfile.read(content_length).decode()
         query_params = parse_qs(query_string)
-
         try:
+            print (parsed_url)
             if parsed_url.path == '/quality':
                 meal_id = query_params.get('meal_id', [None])[0]
                 query_ingredients = {key.lower():val[0] for key,val in query_params.items() if key != 'meal_id'}   
@@ -252,6 +269,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 meal_id = query_params.get('meal_id', [None])[0]
                 query_ingredients = {key.lower():val[0] for key,val in query_params.items() if key != 'meal_id'}   
                 result = post_price(query_string,meal_id,query_ingredients)
+            elif parsed_url.path == '/random':
+                print('params',query_params)
+                budget = query_params.get('budget', [None])[0]
+                result = post_random(query_string,budget)
             else:
                 self.send_response(404)
                 self.end_headers()

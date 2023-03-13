@@ -81,3 +81,18 @@ def validate_price(func):
             return {'error': 'meal_id is missing or not number'}, HTTPStatus.BAD_REQUEST
 
     return wrapper
+
+def validate_random(func):
+    def wrapper(*args, **kwargs):
+
+        query_string = args[0]
+        
+        if query_string == '' or re.match(r"^budget=[\d\.]+$", query_string):
+            # Succesful case
+            return func(*args, **kwargs)
+        
+        else:
+            # Ingredients' validation check in the function
+            return {'error': 'parameter budget is wrong'}, HTTPStatus.BAD_REQUEST
+
+    return wrapper
