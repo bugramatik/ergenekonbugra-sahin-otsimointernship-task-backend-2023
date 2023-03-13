@@ -51,3 +51,33 @@ def validate_getmeals(func):
             return {'error': 'id parameter is missing'}, HTTPStatus.BAD_REQUEST
 
     return wrapper
+
+def validate_quality(func):
+    def wrapper(*args, **kwargs):
+
+        query_string = args[0]
+        
+        if re.match(r"^meal_id=(\d+)($|&)", query_string):
+            # Succesful case
+            return func(*args, **kwargs)
+        
+        else:
+            # Ingredients' validation check in the function
+            return {'error': 'meal_id is missing or not number'}, HTTPStatus.BAD_REQUEST
+
+    return wrapper
+
+def validate_price(func):
+    def wrapper(*args, **kwargs):
+
+        query_string = args[0]
+        
+        if re.match(r"^meal_id=(\d+)($|&)", query_string):
+            # Succesful case
+            return func(*args, **kwargs)
+        
+        else:
+            # Ingredients' validation check in the function
+            return {'error': 'meal_id is missing or not number'}, HTTPStatus.BAD_REQUEST
+
+    return wrapper
