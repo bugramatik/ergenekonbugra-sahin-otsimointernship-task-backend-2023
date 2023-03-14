@@ -1,10 +1,12 @@
-from enum import Enum
 import json
+from enum import Enum
+
 
 class Quality(Enum):
     LOW = 10
     MEDIUM = 20
     HIGH = 30
+
 
 DEFULT_VEGETARIAN_CHOICE = False
 DEFAULT_VEGAN_CHOICE = False
@@ -23,11 +25,10 @@ with open(MEALS_DATASET_PATH) as f:
 meals_dict = {meal['id']: meal for meal in meals_dataset['meals']}
 ingredients_dict = {ingredient['name'].lower(): ingredient for ingredient in meals_dataset['ingredients']}
 
-meals_and_ingredients_dict  = {}
+meals_and_ingredients_dict = {}
 for meal in meals_dataset['meals']:
     meals_and_ingredients_dict[meal['id']] = {
         'id': meal['id'],
         'name': meal['name'],
         'ingredients': {ingredient['name'].lower(): ingredient for ingredient in meals_dict[meal['id']]['ingredients']}
     }
-

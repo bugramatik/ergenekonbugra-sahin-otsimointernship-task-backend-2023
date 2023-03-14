@@ -1,9 +1,10 @@
+import json
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
-from api.constants import *
-from api.endpoints import get_listmeals, get_getmeals,post_quality,post_price,post_random 
 
-import json
+from api.constants import *
+from api.endpoints import get_listmeals, get_getmeals, post_quality, post_price, post_random
+
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     # TODO: config file
@@ -16,15 +17,15 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             if parsed_url.path == '/listMeals':
                 is_vegetarian = query_params.get('is_vegetarian', [DEFULT_VEGETARIAN_CHOICE])[0]
                 is_vegan = query_params.get('is_vegan', [DEFAULT_VEGAN_CHOICE])[0]
-                result,status = get_listmeals(query_string,is_vegetarian, is_vegan)
+                result, status = get_listmeals(query_string, is_vegetarian, is_vegan)
 
             elif parsed_url.path == '/getMeal':
                 query_id = query_params.get('id', [None])[0]
-                result,status = get_getmeals(query_string,query_id)
-                
+                result, status = get_getmeals(query_string, query_id)
+
             elif parsed_url.path == '/getRandom':
                 budget = query_params.get('budget', [None])[0]
-                result,status = post_random(query_string,budget)
+                result, status = post_random(query_string, budget)
 
             else:
                 self.send_response(404)
@@ -42,7 +43,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.send_header('Content-Length', len(response))
         self.end_headers()
         self.wfile.write(response)
-        
+
     def do_POST(self):
         parsed_url = urlparse(self.path)
         content_length = int(self.headers['Content-Length'])
@@ -51,15 +52,15 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         try:
             if parsed_url.path == '/quality':
                 meal_id = query_params.get('meal_id', [None])[0]
-                query_ingredients = {key.lower():val[0] for key,val in query_params.items() if key != 'meal_id'}   
-                result,status = post_quality(query_string,meal_id,query_ingredients)
+                query_ingredients = {key.lower(): val[0] for key, val in query_params.items() if key != 'meal_id'}
+                result, status = post_quality(query_string, meal_id, query_ingredients)
             elif parsed_url.path == '/price':
                 meal_id = query_params.get('meal_id', [None])[0]
-                query_ingredients = {key.lower():val[0] for key,val in query_params.items() if key != 'meal_id'}   
-                result,status = post_price(query_string,meal_id,query_ingredients)
+                query_ingredients = {key.lower(): val[0] for key, val in query_params.items() if key != 'meal_id'}
+                result, status = post_price(query_string, meal_id, query_ingredients)
             elif parsed_url.path == '/random':
                 budget = query_params.get('budget', [None])[0]
-                result,status = post_random(query_string,budget)
+                result, status = post_random(query_string, budget)
             else:
                 self.send_response(404)
                 self.end_headers()
@@ -75,19 +76,3 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.send_header('Content-Length', len(response))
         self.end_headers()
         self.wfile.write(response)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
