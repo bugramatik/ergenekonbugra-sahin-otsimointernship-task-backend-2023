@@ -1,8 +1,8 @@
 from http.server import HTTPServer
 import socket
 from api.main_code import SimpleHTTPRequestHandler
-#TODO: Error handling
- 
+
+
 def run():
     host = ''
     port = 8080

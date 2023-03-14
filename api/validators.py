@@ -86,7 +86,6 @@ def validate_random(func):
     def wrapper(*args, **kwargs):
 
         query_string = args[0]
-        
         if query_string == '' or re.match(r"^budget=[\d\.]+$", query_string):
             # Succesful case
             return func(*args, **kwargs)

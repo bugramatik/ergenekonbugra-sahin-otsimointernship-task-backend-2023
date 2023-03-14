@@ -471,19 +471,19 @@
                     "name": "Grass-fed butter",
                     "quality": "high",
                     "price": 12,
-                    "per_amount": "kilogram"
+                    "per_amount": "litre"
                 },
                 {
                     "name": "Conventional butter",
                     "quality": "medium",
                     "price": 8,
-                    "per_amount": "kilogram"
+                    "per_amount": "litre"
                 },
                 {
                     "name": "Margarine",
                     "quality": "low",
                     "price": 4,
-                    "per_amount": "kilogram"
+                    "per_amount": "litre"
                 }
             ]
         },
@@ -552,19 +552,19 @@
                     "name": "Homemade mashed potatoes",
                     "quality": "high",
                     "price": 10,
-                    "per_amount": "litre"
+                    "per_amount": "kilogram"
                 },
                 {
                     "name": "Store-bought mashed potatoes",
                     "quality": "medium",
                     "price": 7,
-                    "per_amount": "litre"
+                    "per_amount": "kilogram"
                 },
                 {
                     "name": "Instant mashed potatoes",
                     "quality": "low",
                     "price": 4,
-                    "per_amount": "litre"
+                    "per_amount": "kilogram"
                 }
             ]
         },
